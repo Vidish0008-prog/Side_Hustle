@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="ListingLift AI turns rough product notes into polished marketplace listings using a local open-weight AI model." />
+  <title>ListingLift AI — Better listings, less busywork</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="ListingLift home">
+      <span class="brand-mark">L<span>+</span></span>
+      <span>ListingLift<span class="brand-ai"> AI</span></span>
+    </a>
+    <div class="topbar-right">
+      <span class="privacy-pill"><span class="status-dot"></span> Local-first by design</span>
+      <a class="github-link" href="https://ollama.com/" target="_blank" rel="noreferrer">Open model setup ↗</a>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <section class="hero">
+      <div class="eyebrow"><span class="eyebrow-line"></span> BUILT FOR THE SIDE HUSTLE</div>
+      <h1>Turn product notes into<br /><span>listings that sell.</span></h1>
+      <p class="hero-copy">A practical writing assistant for small sellers. Create clear product titles, descriptions, and tags without sending your product details to a third-party AI service.</p>
+      <div class="hero-points">
+        <span><span class="check">✓</span> Your details stay on your device</span>
+        <span><span class="check">✓</span> Open-weight AI with Ollama</span>
+        <span><span class="check">✓</span> No paid API key required</span>
+      </div>
+    </section>
+
+    <section class="workspace">
+      <div class="form-panel panel">
+        <div class="panel-heading">
+          <div>
+            <div class="step-label">STEP 01</div>
+            <h2>Tell us about your product</h2>
+          </div>
+          <span class="spark-icon">✳</span>
+        </div>
+        <form id="listing-form">
+          <label for="product-name">Product name <span class="required">*</span></label>
+          <input id="product-name" name="productName" placeholder="e.g. Handmade ceramic coffee mug" required maxlength="120" />
+
+          <div class="field-row">
+            <div class="field">
+              <label for="marketplace">Where are you selling?</label>
+              <select id="marketplace" name="marketplace">
+                <option value="Etsy">Etsy</option>
+                <option value="eBay">eBay</option>
+                <option value="Shopify">Shopify store</option>
+                <option value="Instagram">Instagram Shop</option>
+                <option value="general">Other / general listing</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="tone">Writing style</label>
+              <select id="tone" name="tone">
+                <option value="Friendly and clear">Friendly & clear</option>
+                <option value="Premium and polished">Premium & polished</option>
+                <option value="Playful and punchy">Playful & punchy</option>
+                <option value="Minimal and factual">Minimal & factual</option>
+              </select>
+            </div>
+          </div>
+
+          <label for="details">Product details <span class="required">*</span></label>
+          <textarea id="details" name="details" rows="5" required maxlength="1800" placeholder="Materials, dimensions, colour, who it's for, how it's made, care instructions, what makes it useful..."></textarea>
+          <div class="textarea-meta"><span>Specific facts make stronger listings.</span><span id="char-count">0 / 1800</span></div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="audience">Ideal customer</label>
+              <input id="audience" name="audience" placeholder="e.g. coffee lovers, gift shoppers" maxlength="140" />
+            </div>
+            <div class="field">
+              <label for="keywords">Keywords to include</label>
+              <input id="keywords" name="keywords" placeholder="e.g. handmade, gift, minimal" maxlength="200" />
+            </div>
+          </div>
+          <button class="generate-btn" id="generate-btn" type="submit">
+            <span class="button-spark">✦</span><span id="button-label">Generate my listing</span><span class="button-arrow">↗</span>
+          </button>
+          <p class="form-note"><span class="lock-icon">▣</span> Local mode sends the prompt to Ollama running on your own computer.</p>
+        </form>
+      </div>
+
+      <div class="output-panel panel">
+        <div class="panel-heading output-heading">
+          <div>
+            <div class="step-label">STEP 02</div>
+            <h2>Your listing studio</h2>
+          </div>
+          <span id="mode-badge" class="mode-badge">DEMO PREVIEW</span>
+        </div>
+        <div id="empty-state" class="empty-state">
+          <div class="empty-illustration">
+            <div class="paper paper-back"></div>
+            <div class="paper paper-front"><span class="paper-star">✦</span><span class="paper-line wide"></span><span class="paper-line"></span><span class="paper-line short"></span><span class="paper-tag"># product</span></div>
+            <span class="floating-star star-a">✧</span><span class="floating-star star-b">✦</span>
+          </div>
+          <h3>Your next great listing starts here.</h3>
+          <p>Add your product details and generate a ready-to-edit title, description, and search tags.</p>
+          <div class="empty-tip"><span>✳</span> Tip: Include real materials, size, and use cases.</div>
+        </div>
+
+        <div id="results" class="results hidden">
+          <div class="result-block">
+            <div class="result-label"><span>01</span> LISTING TITLE <button class="copy-btn" data-copy="result-title">Copy ↗</button></div>
+            <p id="result-title" class="result-title"></p>
+          </div>
+          <div class="result-block">
+            <div class="result-label"><span>02</span> PRODUCT DESCRIPTION <button class="copy-btn" data-copy="result-description">Copy ↗</button></div>
+            <p id="result-description" class="result-description"></p>
+          </div>
+          <div class="result-block">
+            <div class="result-label"><span>03</span> SEARCH TAGS <button class="copy-btn" data-copy="result-tags">Copy ↗</button></div>
+            <div id="result-tags" class="tag-list"></div>
+            <button class="copy-all-btn" data-copy="result-tags">Copy tags</button>
+          </div>
+          <div class="result-footer"><span class="result-check">✓</span> Review all details before publishing. AI can make mistakes.</div>
+        </div>
+        <div id="error-message" class="error-message hidden" role="status"></div>
+      </div>
+    </section>
+
+    <section class="bottom-strip">
+      <div class="bottom-item"><span class="bottom-icon">⌘</span><div><strong>Open-source powered</strong><span>Works with open-weight models via Ollama.</span></div></div>
+      <div class="bottom-item"><span class="bottom-icon">◈</span><div><strong>Privacy-first workflow</strong><span>Your prompt stays local when using local Ollama.</span></div></div>
+      <div class="bottom-item"><span class="bottom-icon">↗</span><div><strong>Made for real sellers</strong><span>Less repetitive writing, more time for the business.</span></div></div>
+    </section>
+    <footer><span>ListingLift AI</span><span>Independent project · Hacktoberfest 2026 · Side Hustle</span></footer>
+  </main>
+</body>
+</html>
